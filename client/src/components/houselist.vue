@@ -1,33 +1,24 @@
 <template>
-  <div>
+  <div class="konten">
     <div class="columns" v-for="house in houselist">
-      <article class="media" @click="onehouse(house._id)">
-        <figure class="media-left">
-          <p class="image is-is-128x128">
+      <article class="media">
+        <figure class="media-left" @click="onehouse(house._id)">
+          <p class="image is-128x128">
             <img :src="house.image">
           </p>
         </figure>
         <div class="media-content">
           <div class="content">
-            <h1 class="title">{{house.name}}</h1>
-            <h2 class="subtitle">{{house.location}}</h2>
+            <h1 class="title" @click="onehouse(house._id)">{{house.name}}</h1>
+            <p @click="onehouse(house._id)">{{house.location}}</p>
           </div>
         </div>
         <div class="media-right" v-if="house.seller._id == userId">
           <router-link 
-            :to="{ path: '/edit' }" 
-            :id="house._id"
-            :name="house.name"
-            :description="house.description"
-            :location="house.location"
-            :price="house.price"
-            :image="house.image"
-            :bedroom="house.bedroom"
-            :bathroom="house.bathroom"
-            :kitchen="house.kitchen"
             :token="token"
+            :to="{ name: 'edit', params: { id: house._id }}" 
             >
-            <i class="fa fa-edit" @click="edit()"></i>
+            <i class="fa fa-edit"></i>
           </router-link>
           <button class="delete" @click="destroy(house._id)"></button>
         </div>
@@ -41,14 +32,15 @@ import * as axios from 'axios';
 
 export default {
   name: 'houselist',
-  props: ['houselist', 'token'],
+  props: ['houselist', 'token', 'userId'],
   data () {
     return {
     }
   },
   methods : {
     onehouse: function (id) {
-      this.$router.push({ name: 'house', params: { userId: id }})
+      console.log(id)
+      this.$router.push({ name: 'house', params: { id: id }})
     },
     destroy: function (id) {
       axios.delete(`http://localhost:3000/${id}`)
@@ -65,5 +57,14 @@ export default {
   .title {
     border-left: 3px solid #31221F;
     color: #31221F;
+  }
+  .konten{
+    padding-top: 2em;
+  }
+  .media{
+    width: 100%;
+  }
+  .media-content{
+    width: 100%;
   }
 </style>

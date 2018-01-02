@@ -65,7 +65,8 @@
         </a>
       </p>
     </div>
-    <router-view :houselist="houses" :token="token" @token="token = $event" @userId="userId = $event"v-show="normal" ></router-view>
+    <p v-show="message">{{message}}</p>
+    <router-view :houselist="houses" :token="token" :userId="userId" @token="token = $event" @userId="userId = $event"v-show="normal" ></router-view>
     <addform v-if="!normal" @normal="normal = $event" :token="token"></addform>
   </div>
 </div>
@@ -89,6 +90,7 @@ export default {
       normal: true,
       searchque: '',
       searchcat: 'Location',
+      message: null,
     }
   },
   methods: {
@@ -103,16 +105,22 @@ export default {
     },
     alllist: function () {
       let _this = this
+      _this.normal = true
+      _this.message = null
       axios.get(`http://localhost:3000/houses`)
       .then(function (resp) {
         _this.houses = resp.data.data
+        _this.$router.push('/')
       })
     },
     mylist: function () {
       let _this = this
+      _this.normal = true
+      _this.message = null
       axios.get(`http://localhost:3000/houses/seller/${_this.userId}`)
       .then(function (resp) {
         _this.houses = resp.data.data
+        _this.$router.push('/')
       })
     },
     searchfun: function () {
@@ -121,11 +129,27 @@ export default {
         axios.get(`http://localhost:3000/location?q=${_this.searchque}`)
         .then(function (resp) {
           _this.houses = resp.data.data
+          _this.searchque = ''
+        })
+        .catch(function (resp) {
+          if (resp.response.status == 404) {
+            _this.houses = []
+            _this.searchque = ''
+            _this.message = "Not found. Try another query."
+          }
         })
       } else if (_this.searchcat == 'Name') {
         axios.get(`http://localhost:3000/name?q=${_this.searchque}`)
         .then(function (resp) {
           _this.houses = resp.data.data
+          _this.searchque = ''
+        })
+        .catch(function (resp) {
+          if (resp.response.status == 404) {
+            _this.houses = []
+            _this.searchque = ''
+            _this.message = "Not found. Try another query."
+          }
         })
       }
     },

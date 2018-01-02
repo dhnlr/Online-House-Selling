@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1 class="title">Add Property</h1>
+      <h1 class="title">Edit Property</h1>
       <div class="field">
         <label class="label">Name</label>
         <p class="control has-icons-left">
@@ -96,15 +96,15 @@
         </div>
       </nav>
       <div class="field is-grouped">
-      <p class="control">
-        <a class="button is-warning" @click="submit()">
-          Edit
-        </a>
-      </p>
-      <p class="control">
-        <router-link :to="/" class="button is-light">Cancel</router-link>
-      </p> 
-    </div>
+        <p class="control">
+          <a class="button is-warning" @click="submit()">
+            Edit
+          </a>
+        </p>
+        <p class="control">
+          <router-link :to="{path: '/'}" class="button is-light">Cancel</router-link>
+        </p> 
+      </div>
     </div>
 </template>
 
@@ -114,11 +114,19 @@ import * as axios from 'axios';
 export default {
 
   name: 'edit',
-  props : ['token', 'name', 'description', 'location', 'price', 'image', 'bedroom', 'bathroom', 'kitchen'], 
+  props : ['token'], 
   data () {
     return {
+      name : '',
+      description : '',
+      location : '',
+      price : '',
+      image: '',
       imageName: null,
       imagemetada : null,
+      bedroom : '',
+      bathroom : '',
+      kitchen : '',
     }
   },
   methods: {
@@ -148,6 +156,7 @@ export default {
       formdata.append('name', this.name)
       formdata.append('description', this.description)
       formdata.append('location', this.location)
+      formdata.append('price', this.price)
       formdata.append('image', this.imagemetada)
       formdata.append('bedroom', this.bedroom)
       formdata.append('bathroom', this.bathroom)
@@ -172,6 +181,20 @@ export default {
         _this.$router.push('/')
       })
     }
+  },
+  created: function () {
+    let _this = this
+    axios.get(`http://localhost:3000/houses/${_this.$route.params.id}`)
+    .then(function (resp) {
+      _this.name = resp.data.data[0].name
+      _this.description = resp.data.data[0].description
+      _this.location = resp.data.data[0].location
+      _this.image = resp.data.data[0].image
+      _this.price = resp.data.data[0].price
+      _this.bedroom = resp.data.data[0].bedroom
+      _this.bathroom = resp.data.data[0].bathroom
+      _this.kitchen = resp.data.data[0].kitchen
+    })
   }
 }
 </script>

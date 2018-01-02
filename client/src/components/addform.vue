@@ -178,6 +178,7 @@ export default {
       formdata.append('name', this.name)
       formdata.append('description', this.description)
       formdata.append('location', this.location)
+      formdata.append('price', this.price)
       formdata.append('image', this.imagemetada)
       formdata.append('bedroom', this.bedroom)
       formdata.append('bathroom', this.bathroom)

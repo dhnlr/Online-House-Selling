@@ -1,42 +1,56 @@
 <template>
 <div>
 	<div class="columns">
-		<div class="col has-text-centered">
+		<div class="column  has-text-centered">
 			<figure class="image image is-square">
-			  <img src="https://bulma.io/images/placeholders/256x256.png">
+			  <img :src="image">
 			</figure>
 		</div>
-		<div class="col">
+		<div class="column">
 			<h1 class="title">{{name}}</h1>
 			<h2 class="subtitle">{{location}}</h2>
 			<hr>
-			<p>{{description}}</p>
-			<div class="column">
-				<div class="col"><i class="fa fa-bed"></i> Bedroom {{bedroom}}</div>
-				<div class="col"><i class="fa fa-bath"></i> Bathroom {{bathroom}}</div>
-				<div class="col"><i class="fa fa-spoon"></i> Kitchen {{kitchen}}</div>
-			</div>
+			<p class="subtitle">{{description}}</p>
 			<hr>
+			<nav class="level">
+			  <div class="level-item has-text-centered">
+			    <div>
+			      <p class="heading"><i class="fa fa-bed"></i><br>Bedroom</p>
+			      <p class="title">{{bedroom}}</p>
+			    </div>
+			  </div>
+			  <div class="level-item has-text-centered">
+			    <div>
+			      <p class="heading"><i class="fa fa-bath"></i><br>Bathroom</p>
+			      <p class="title">{{bathroom}}</p>
+			    </div>
+			  </div>
+			  <div class="level-item has-text-centered">
+			    <div>
+			      <p class="heading"><i class="fa fa-spoon"></i><br>Kitchen</p>
+			      <p class="title">{{kitchen}}</p>
+			    </div>
+			  </div>
+			</nav>
+			<hr>
+			<img :src="map" alt="map">
+			<hr>
+			<p class="heading">Contact</p>
+			<nav class="level">
+				<div class="level-left">
+			   		<div class="level-item">
+			   			<p class="subtitle">{{seller.fullname}}</p>
+			   		</div>
+			   	</div>
+			   	<div class="level-right">
+			   		<div class="level-item has-text-centered">
+	   					<p class="subtitle">{{seller.phone}}</p>
+			   		</div>
+			   	</div>
+			</nav>
 		</div>
 	</div>
-	<section class="hero">
-	  <div class="hero-body">
-	    <img :src="map" alt="map">
-	  </div>
-	</section>
-	<nav class="level">
-		<div class="level-left">
-	   		<div class="level-item">
-	   			Contact:
-	   		</div>
-	   	</div>
-	   	<div class="level-right">
-	   		<div class="level-item">
-	   			<p>{{seller.name}}</p>
-	   			<p>{{seller.phone}}</p>
-	   		</div>
-	   	</div>
-	</nav>
+	
 </div>
 </template>
 
@@ -74,11 +88,15 @@ export default {
   		_this.bathroom = resp.data.data[0].bathroom
   		_this.kitchen = resp.data.data[0].kitchen
   		_this.seller = resp.data.data[0].seller
-  	})
-  	axios.post(`http://maps.googleapis.com/maps/api/geocode/json?address=${_this.location}`)
-  	.then( function (resp) {
-  		_this.map="//maps.googleapis.com/maps/api/staticmap?size=1306x359&maptype=roadmap&key=&center="+resp.results[0].geometry.location.lat+","+resp.results[0].geometry.location.lng+"&markers=color:blue%7Clabel:S%7C"+resp.results[0].geometry.location.lat+"%7C"+resp.results[0].geometry.location.lng
-  		
+  		let locationMap = _this.location.split(' ').join('+')
+  	 	axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+	        params: {
+	          address: _this.location
+	        }
+	      })
+	  	.then( function (resp) {
+	  		_this.map= '//maps.googleapis.com/maps/api/staticmap?size=900x200&maptype=roadmap&key=AIzaSyAos5IQmvJk_VoKzQuHQM1debRTobqELV4&center="'+resp.data.results[0].geometry.location.lat+","+resp.data.results[0].geometry.location.lng+'"&markers=color:blue%7Clabel:LOCATION%7C'+resp.data.results[0].geometry.location.lat+','+resp.data.results[0].geometry.location.lng
+	  	})
   	})
   }
 }
