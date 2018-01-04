@@ -13,8 +13,9 @@ User who has account can publish advertising for his property/house and guest ca
 
 ## What's the roadmap?
 
-- [ ] Improve search feature
-- [ ] Testing back-end (see problems)
+- [x] ~~Improve search feature~~
+- [x] ~~Testing back-end (see problems)~~
+- [ ] ~~Nothing~~
 
 ## How to run?
 
@@ -34,6 +35,12 @@ User who has account can publish advertising for his property/house and guest ca
 
 You can try this at [House](http://house.dhnlr.com)
 
+Demo account
+```
+username : coba
+password : coba
+```
+
 *Ps. I don't make sure that link always runs and don't abuse this database or CPU usage*
 
 ## How about license?
@@ -42,9 +49,7 @@ All my work licensed with AGPL 3.0. All other work belongs to owner with their l
 Ps. Sorry for using image and other work without permission. Please, don't sue me.
 
 ## Problem
-I have problem with NodeJS in my system. It ruins my spirit to finish this project.
-
-If you know how to fix this error, please message me.
+I have problem with NodeJS in my system. If you know how to fix this error, please message me.
 ```
 /usr/bin/node8[12871]: ../src/node_buffer.cc:210:char* node::Buffer::Data(v8::Local<v8::Value>): Assertion `val->IsArrayBufferView()' failed.
  1: node::Abort() [/usr/bin/node8]
