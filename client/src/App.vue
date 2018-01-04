@@ -47,7 +47,7 @@
       </div>
     </div>
   </section>
-  <div class="container is-fluid" :class="[token ? 'badan' : '']">
+  <div class="container is-fluid">
     <div class="field is-grouped is-grouped-right tambah"  v-show="token">
       <p class="control">
         <a class="button is-primary" @click="addform()">
@@ -126,7 +126,7 @@ export default {
     searchfun: function () {
       let _this = this
       if (_this.searchcat == 'Location') {
-        axios.get(`http://localhost:3000/location?q=${_this.searchque}`)
+        axios.get(`http://localhost:3000/houses/location?q=${_this.searchque}`)
         .then(function (resp) {
           _this.houses = resp.data.data
           _this.searchque = ''
@@ -139,8 +139,9 @@ export default {
           }
         })
       } else if (_this.searchcat == 'Name') {
-        axios.get(`http://localhost:3000/name?q=${_this.searchque}`)
+        axios.get(`http://localhost:3000/houses/name?q=${_this.searchque}`)
         .then(function (resp) {
+          console.log(resp)
           _this.houses = resp.data.data
           _this.searchque = ''
         })
@@ -230,9 +231,6 @@ export default {
   .select.cari{
     height: 3em !important;
     border: 0px;
-  }
-  .badan {
-    padding-top: 1em;
   }
   .tambah {
     border-top: 1px dashed #ccc;

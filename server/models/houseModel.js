@@ -72,13 +72,13 @@ const readSel = (seller, callback) => {
 }
 
 const readName = (name, callback) => {
-	House.find({'name': new RegExp('^'+name+'$', "i")}).populate('seller').exec().then( house=>{
+	House.find({'name': new RegExp('('+name+')\\w+', "gi")}).populate('seller').exec().then( house=>{
 			callback(house)
 	})
 }
 
 const readLoc = (location, callback) => {
-	House.find({'location': new RegExp('^'+location+'$', "i")}).populate('seller').exec().then( house=>{
+	House.find({'location': new RegExp('('+location+')\\w+', "gi")}).populate('seller').exec().then( house=>{
 			callback(house)
 	})
 }

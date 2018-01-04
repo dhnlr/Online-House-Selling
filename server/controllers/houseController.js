@@ -48,14 +48,14 @@ class HouseController {
 	}
 	static getHouseName(req,res){
 		readName(req.query.q, (house)=>{
-			if (house) {
+			if (house.length) {
 				res.status(200).json({
 					message: 'Houses summoned',
 					data: house,
 				})
 			}
 			else {
-				res.status(400).json({
+				res.status(404).json({
 					message: 'Error occured'
 				})
 			}
@@ -63,14 +63,14 @@ class HouseController {
 	}
 	static getHouseLoc(req,res){
 		readLoc(req.query.q, (house)=>{
-			if (house) {
+			if (house.length) {
 				res.status(200).json({
 					message: 'Houses summoned',
 					data: house,
 				})
 			}
 			else {
-				res.status(400).json({
+				res.status(404).json({
 					message: 'Error occured'
 				})
 			}
