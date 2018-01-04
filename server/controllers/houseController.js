@@ -86,7 +86,7 @@ class HouseController {
 			bedroom: req.body.bedroom,
 			bathroom: req.body.bathroom,
 			kitchen: req.body.kitchen,
-			seller: req.body.seller
+			seller: req.decoded.userId
 		}
 		create(data, (error, data)=>{
 			if (!error) {
