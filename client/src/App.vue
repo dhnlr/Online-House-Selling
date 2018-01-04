@@ -47,8 +47,8 @@
       </div>
     </div>
   </section>
-  <div class="container is-fluid badan">
-    <div class="field is-grouped is-grouped-right tambah" v-show="token">
+  <div class="container is-fluid" :class="[token ? 'badan' : '']">
+    <div class="field is-grouped is-grouped-right tambah"  v-show="token">
       <p class="control">
         <a class="button is-primary" @click="addform()">
           Add
@@ -224,11 +224,11 @@ export default {
     height: 3em;
   }
   select.cari{
-    height: 3em;
+    height: 3em !important;
     border: 0px;
   }
   .select.cari{
-    height: 3em;
+    height: 3em !important;
     border: 0px;
   }
   .badan {
@@ -238,5 +238,8 @@ export default {
     border-top: 1px dashed #ccc;
     border-bottom: 1px dashed #ccc;
     padding: 5px 0;
+  }
+  .field.has-addons{
+    flex-wrap: wrap;
   }
 </style>
