@@ -43,7 +43,7 @@ export default {
       this.$router.push({ name: 'house', params: { id: id }})
     },
     destroy: function (id) {
-      axios.delete(`http://localhost:3000/${id}`)
+      axios.delete(`http://35.196.201.48/${id}`)
       .then( function (resp) {
         location.reload()
       })

@@ -14,16 +14,17 @@
             <div class="field">
               <label class="label">Username</label>
               <p class="control has-icons-left">
-                <input class="input is-rounded" type="text" v-model="username">
+                <input class="input is-rounded" :class="[goodusername ? '' : 'is-danger']" type="text" :disabled="isprocess" v-model="username">
                 <span class="icon is-small is-left">
                   <i class="fa fa-user"></i>
                 </span>
               </p>
+              <p class="help is-danger" v-if="!goodusername">Only alphabet and lowercase allowed</p>
             </div>
             <div class="field">
               <label class="label">Fullname</label>
               <p class="control has-icons-left">
-                <input class="input is-rounded" type="text" v-model="fullname">
+                <input class="input is-rounded" type="text" :disabled="isprocess" v-model="fullname">
                 <span class="icon is-small is-left">
                   <i class="fa fa-id-card"></i>
                 </span>
@@ -32,7 +33,7 @@
             <div class="field">
               <label class="label">Phone Number</label>
               <div class="control has-icons-left">
-                <input class="input is-rounded" type="text" v-model="contact">
+                <input class="input is-rounded" type="text" :disabled="isprocess" v-model="contact">
                 <span class="icon is-small is-left">
                   <i class="fa fa-phone"></i>
                 </span>
@@ -41,7 +42,7 @@
             <div class="field">
               <label class="label">Password</label>
               <p class="control has-icons-left">
-                <input class="input is-rounded" :class="[samepassword ? '' : 'is-danger']" type="password" v-model="password">
+                <input class="input is-rounded" :class="[samepassword ? '' : 'is-danger']" type="password" :disabled="isprocess" v-model="password">
                 <span class="icon is-small is-left">
                   <i class="fa fa-lock"></i>
                 </span>
@@ -50,7 +51,7 @@
             <div class="field">
               <label class="label">Verification Password</label>
               <p class="control has-icons-left">
-                <input class="input is-rounded" :class="[samepassword ? '' : 'is-danger']" type="password" v-model="verifpassword">
+                <input class="input is-rounded" :class="[samepassword ? '' : 'is-danger']" type="password" :disabled="isprocess" v-model="verifpassword">
                 <span class="icon is-small is-left">
                   <i class="fa fa-lock"></i>
                 </span>
@@ -59,7 +60,7 @@
             </div>
             <div class="field is-grouped is-grouped-centered">
               <p class="control">
-                <a class="button is-primary is-rounded" @click="signup()">
+                <a class="button is-primary is-rounded" :class="{ is-loading: isprocess }" :disabled="isprocess" @click="signup()">
                   Signup
                 </a>
               </p>
@@ -83,35 +84,65 @@ export default {
 
   data () {
     return {
-      username: '',
-      fullname: '',
-      contact: '',
+      username: null,
+      fullname: null,
+      contact: null,
       password: null,
       verifpassword: null,
       samepassword: true,
+      goodusername: true,
     }
   },
   methods: {
     signup: function () {
       let _this = this
-      if (_this.password == _this.verifpassword) {
-        axios.post(`http://localhost:3000/signup`, {
-          username: _this.username,
-          fullname: _this.fullname,
-          contact: _this.contact,
-          password: _this.password
-        })
-        .then(function () {
+      if (this.username && this.fullname && this.contact && this.password && this.verifpassword) {
+        if ((/[a-z]/.test(this.username)) || this.username == this.username.toLowerCase()) {
+          if (_this.password == _this.verifpassword) {
+            axios.post(`http://35.196.201.48/signup`, {
+              username: _this.username,
+              fullname: _this.fullname,
+              contact: _this.contact,
+              password: _this.password
+            })
+            .then(function () {
+              _this.password = null
+              _this.verifpassword = null
+              _this.username = null
+              _this.contact = null
+              _this.fullname = null
+            })
+            .catch(error => {
+              _this.isprocess = false
+              _this.warning = error.response.data.error.errors.username.message
+            })
+          } else {
+            _this.samepassword = true
+            _this.goodusername = true
+            _this.password = null
+            _this.verifpassword = null
+            _this.username = null
+            _this.contact = null
+            _this.fullname = null
+            _this.isprocess = false
+            _this.warning = "Make sure confirmation password same as your password"
+          }
+        } else {
+          _this.samepassword = true
+          _this.goodusername = true
           _this.password = null
           _this.verifpassword = null
-          _this.username = ''
-          _this.contact = ''
-          _this.fullname = ''
-        })
+          _this.username = null
+          _this.contact = null
+          _this.fullname = null
+          _this.isprocess = false
+          _this.warning = "Only alphabet and lowercase allowed for username"
+        }
       } else {
-        _this.samepassword = false
-        _this.password = null
-        _this.verifpassword = null
+        _this.samepassword = true
+        _this.goodusername = true
+        _this.isprocess = false
+        _this.warning = "All column is required."
       }
     }
   }

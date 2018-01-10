@@ -11,19 +11,23 @@
             <!-- Login -->
             <h1 class="title">Welcome back</h1>
             <h2 class="subtitle">Time to manage your property</h2>
+            <div class="message-body">
+              {{warning}}
+            </div>
             <div class="field">
               <label class="label">Username</label>
               <p class="control has-icons-left">
-                <input class="input is-rounded" type="text" v-model="username">
+                <input class="input is-rounded" :class="[goodusername ? '' : 'is-danger']" type="text" :disabled="isprocess" v-model="username">
                 <span class="icon is-small is-left">
                   <i class="fa fa-user"></i>
                 </span>
               </p>
+              <p class="help is-danger" v-if="!goodusername">Only alphabet and lowercase allowed</p>
             </div>
             <div class="field">
               <label class="label">Password</label>
               <p class="control has-icons-left">
-                <input class="input is-rounded" type="password" v-model="password">
+                <input class="input is-rounded" type="password" :disabled="isprocess" v-model="password">
                 <span class="icon is-small is-left">
                   <i class="fa fa-lock"></i>
                 </span>
@@ -31,7 +35,7 @@
             </div>
             <div class="field is-grouped is-grouped-centered">
               <p class="control">
-                <a class="button is-info is-rounded" @click="login()">
+                <a class="button is-info is-rounded" :class="{ is-loading: isprocess }" :disabled="isprocess" @click="login()">
                   Signin
                 </a>
               </p>
@@ -58,29 +62,52 @@ export default {
       isactive: true,
       username: '',
       password: null,
+      isprocess: false,
+      warning: null,
+      goodusername: true
     }
   },
   methods: {
     login: function () {
       let _this = this
-      axios.post(`http://localhost:3000/signin`, {
-        username : _this.username,
-        password : _this.password
-      })
-      .then( function (resp) {
+      _this.isprocess = true
+      if ((/[a-z]/.test(this.username)) || this.username == this.username.toLowerCase()) {
+        axios.post(`http://35.196.201.48/signin`, {
+          username : _this.username,
+          password : _this.password
+        })
+        .then( function (resp) {
+          _this.username = ''
+          _this.password = null
+          localStorage.token = resp.data.data
+          localStorage.userId = resp.data.userId
+          _this.$emit('token', resp.data.data)
+          _this.$emit('userId', resp.data.userId)
+          _this.isprocess = false
+          _this.$router.push('/')
+        })
+      } else {
         _this.username = ''
         _this.password = null
-        localStorage.token = resp.data.data
-        localStorage.userId = resp.data.userId
-        _this.$emit('token', resp.data.data)
-        _this.$emit('userId', resp.data.userId)
-        _this.$router.push('/')
-      })
+        _this.isprocess = false
+        _this.warning = "Only alphabet and lowercase allowed for username"
+      }
     }
   },
   created: function (argument) {
     if (this.token) {
       this.$router.push('/')
+    }
+  },
+  watch: {
+    username: function () {
+      if (this.username) {
+        if (!(/[a-z]/.test(this.username)) || this.username !== this.username.toLowerCase()) {
+          this.goodusername = false
+        } else {
+          this.goodusername = true
+        }
+      }
     }
   }
 }
