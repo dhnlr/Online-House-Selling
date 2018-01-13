@@ -2,9 +2,10 @@
   <div id="app">
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-          <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
-        </a>
+      <router-link class="navbar-item" to="/">
+          <img src="./assets/logo.png" title="Online House Selling" alt="logo" width="auto" height="28">
+          &nbsp&nbspHOUSE
+        </router-link>
       <button class="button navbar-burger" data-target="navMenu">
         <span></span>
         <span></span>
@@ -47,8 +48,8 @@
       </div>
     </div>
   </section>
-  <div class="container is-fluid">
-    <div class="field is-grouped is-grouped-right tambah"  v-show="token">
+  <div class="container is-fluid" v-show="token">
+    <div class="field is-grouped is-grouped-right tambah"  >
       <p class="control">
         <a class="button is-primary" @click="addform()">
           Add
@@ -141,7 +142,6 @@ export default {
       } else if (_this.searchcat == 'Name') {
         axios.get(`http://localhost:3000/houses/name?q=${_this.searchque}`)
         .then(function (resp) {
-          console.log(resp)
           _this.houses = resp.data.data
           _this.searchque = ''
         })
@@ -239,5 +239,11 @@ export default {
   }
   .field.has-addons{
     flex-wrap: wrap;
+  }
+  .navbar{
+    padding: 0 0.75em;
+  }
+  .tambah{
+    margin-top: 2em;
   }
 </style>

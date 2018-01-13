@@ -11,7 +11,7 @@
             <!-- Login -->
             <h1 class="title">Welcome back</h1>
             <h2 class="subtitle">Time to manage your property</h2>
-            <div class="message-body">
+            <div class="message-body" v-if="warning">
               {{warning}}
             </div>
             <div class="field">
@@ -35,7 +35,7 @@
             </div>
             <div class="field is-grouped is-grouped-centered">
               <p class="control">
-                <a class="button is-info is-rounded" :class="{ is-loading: isprocess }" :disabled="isprocess" @click="login()">
+                <a class="button is-info is-rounded" :class="{ 'is-loading': isprocess }" :disabled="isprocess" @click="login()">
                   Signin
                 </a>
               </p>
@@ -84,6 +84,7 @@ export default {
           _this.$emit('token', resp.data.data)
           _this.$emit('userId', resp.data.userId)
           _this.isprocess = false
+          _this.warning = null
           _this.$router.push('/')
         })
       } else {

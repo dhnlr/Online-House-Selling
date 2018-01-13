@@ -11,6 +11,9 @@
             <!-- Login -->
             <h1 class="title">Join us</h1>
             <h2 class="subtitle">Publish your property advertising.</h2>
+            <div class="message-body" v-if="warning">
+              {{warning}}
+            </div>
             <div class="field">
               <label class="label">Username</label>
               <p class="control has-icons-left">
@@ -60,7 +63,7 @@
             </div>
             <div class="field is-grouped is-grouped-centered">
               <p class="control">
-                <a class="button is-primary is-rounded" :class="{ is-loading: isprocess }" :disabled="isprocess" @click="signup()">
+                <a class="button is-primary is-rounded" :class="{ 'is-loading': isprocess }" :disabled="isprocess" @click="signup()">
                   Signup
                 </a>
               </p>
@@ -91,11 +94,14 @@ export default {
       verifpassword: null,
       samepassword: true,
       goodusername: true,
+      isprocess: false,
+      warning: null,
     }
   },
   methods: {
     signup: function () {
       let _this = this
+      _this.isprocess = true
       if (this.username && this.fullname && this.contact && this.password && this.verifpassword) {
         if ((/[a-z]/.test(this.username)) || this.username == this.username.toLowerCase()) {
           if (_this.password == _this.verifpassword) {
@@ -111,6 +117,8 @@ export default {
               _this.username = null
               _this.contact = null
               _this.fullname = null
+              _this.isprocess = false
+              _this.warning = null
             })
             .catch(error => {
               _this.isprocess = false
@@ -143,6 +151,24 @@ export default {
         _this.goodusername = true
         _this.isprocess = false
         _this.warning = "All column is required."
+      }
+    }
+  },
+  watch: {
+    verifpassword: function () {
+      if(this.verifpassword != this.password){
+        this.samepassword = false
+      } else {
+        this.samepassword = true
+      }
+    },
+    username: function () {
+      if (this.username) {
+        if (!(/[a-z]/.test(this.username)) || this.username !== this.username.toLowerCase()) {
+          this.goodusername = false
+        } else {
+          this.goodusername = true
+        }
       }
     }
   }

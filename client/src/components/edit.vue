@@ -97,7 +97,7 @@
       </nav>
       <div class="field is-grouped">
         <p class="control">
-          <a class="button is-warning" :class="{ is-loading: isprocess }" :disabled="isprocess" @click="submit()">
+          <a class="button is-warning" :class="{ 'is-loading': isprocess }" :disabled="isprocess" @click="submit()">
             Edit
           </a>
         </p>
@@ -132,8 +132,6 @@ export default {
   },
   methods: {
     onFileChange(e) {
-      console.log(e)
-      console.log(this.token)
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length)
         return;
@@ -168,7 +166,6 @@ export default {
         'token' : _this.token
       }})
       .then( function (resp) {
-        console.log(resp)
         _this.$emit('normal', true)
         _this.name = ''
         _this.description = ''

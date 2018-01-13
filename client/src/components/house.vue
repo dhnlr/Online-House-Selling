@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="columns">
-		<div class="column  has-text-centered">
+		<div class="column has-text-centered">
 			<figure class="image image is-square">
 			  <img :src="image">
 			</figure>
@@ -103,4 +103,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+  .columns{
+    padding: 2em 0;
+  }
 </style>
