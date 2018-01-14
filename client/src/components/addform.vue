@@ -4,7 +4,7 @@
       <div class="field">
         <label class="label">Name</label>
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Name" v-model="name">
+          <input class="input" type="text" placeholder="Name" :disabled="isprocess" v-model="name">
           <span class="icon is-small is-left">
             <i class="fa fa-address-card"></i>
           </span>
@@ -13,7 +13,7 @@
       <div class="field">
         <label class="label">Description</label>
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Description" v-model="description">
+          <input class="input" type="text" placeholder="Description" :disabled="isprocess" v-model="description">
           <span class="icon is-small is-left">
             <i class="fa fa-book"></i>
           </span>
@@ -22,7 +22,7 @@
       <div class="field">
         <label class="label">Location</label>
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Location" v-model="location">
+          <input class="input" type="text" placeholder="Location" :disabled="isprocess" v-model="location">
           <span class="icon is-small is-left">
             <i class="fa fa-map"></i>
           </span>
@@ -31,7 +31,7 @@
       <div class="field">
         <label class="label">Price</label>
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Price" v-model="price">
+          <input class="input" type="text" placeholder="Price" :disabled="isprocess" v-model="price">
           <span class="icon is-small is-left">
             <i class="fa fa-money"></i>
           </span>
@@ -40,7 +40,7 @@
       <div class="field">
         <label class="label">Bedroom</label>
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Bedroom" v-model="bedroom">
+          <input class="input" type="text" placeholder="Bedroom" :disabled="isprocess" v-model="bedroom">
           <span class="icon is-small is-left">
             <i class="fa fa-bed"></i>
           </span>
@@ -49,7 +49,7 @@
       <div class="field">
         <label class="label">Bathroom</label>
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Bathroom" v-model="bathroom">
+          <input class="input" type="text" placeholder="Bathroom" :disabled="isprocess" v-model="bathroom">
           <span class="icon is-small is-left">
             <i class="fa fa-bath"></i>
           </span>
@@ -58,7 +58,7 @@
       <div class="field">
         <label class="label">Kitchen</label>
         <p class="control has-icons-left">
-          <input class="input" type="text" placeholder="Kitchen" v-model="kitchen">
+          <input class="input" type="text" placeholder="Kitchen" :disabled="isprocess" v-model="kitchen">
           <span class="icon is-small is-left">
             <i class="fa fa-spoon"></i>
           </span>
@@ -71,7 +71,7 @@
             <div class="field">
               <div class="file is-boxed is-primary has-name">
                 <label class="file-label">
-                  <input class="file-input" type="file" name="resume" @change="onFileChange">
+                  <input class="file-input" type="file" name="resume" :disabled="isprocess" @change="onFileChange">
                   <span class="file-cta">
                     <span class="file-icon">
                       <i class="fa fa-upload"></i>
@@ -97,17 +97,17 @@
       </nav>
       <div class="field is-grouped">
       <p class="control">
-        <a class="button is-success" @click="submit()">
+        <a class="button is-success" :class="{ 'is-loading': isprocess }" :disabled="isprocess" @click="submit()">
           Add
         </a>
       </p>
       <p class="control">
-        <a class="button is-danger" @click="reset()">
+        <a class="button is-danger" :disabled="isprocess" @click="reset()">
           Reset
         </a>
       </p>
       <p class="control">
-        <a class="button is-light" @click="cancel()">
+        <a class="button is-light" :disabled="isprocess" @click="cancel()">
           Cancel
         </a>
       </p>  
@@ -134,6 +134,7 @@ export default {
       bedroom : '',
       bathroom : '',
       kitchen : '',
+      isprocess: false
     }
   },
   methods: {
@@ -151,10 +152,9 @@ export default {
       this.bedroom = ''
       this.bathroom = ''
       this.kitchen = ''
+      this.isprocess = true
     },
     onFileChange(e) {
-      console.log(e)
-      console.log(this.token)
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length)
         return;
@@ -174,6 +174,7 @@ export default {
     },
     submit: function () {
       let _this = this;
+      _this.isprocess = true
       let formdata = new FormData()
       formdata.append('name', this.name)
       formdata.append('description', this.description)
@@ -183,7 +184,7 @@ export default {
       formdata.append('bedroom', this.bedroom)
       formdata.append('bathroom', this.bathroom)
       formdata.append('kitchen', this.kitchen)
-      axios.post(`http://localhost:3000/houses/add`, formdata, {headers: {
+      axios.post(`http://35.196.201.48/houses/add`, formdata, {headers: {
         'content-type': 'multipart/form-data',
         'token' : _this.token
       }})
@@ -198,6 +199,7 @@ export default {
         _this.bedroom = ''
         _this.bathroom = ''
         _this.kitchen = ''
+        _this.isprocess = false
         _this.$router.push('/')
       })
     }

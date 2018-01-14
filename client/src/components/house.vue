@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="columns">
-		<div class="column  has-text-centered">
+		<div class="column has-text-centered">
 			<figure class="image image is-square">
 			  <img :src="image">
 			</figure>
@@ -77,7 +77,7 @@ export default {
   },
   created: function (){
   	let _this = this
-  	axios.get(`http://localhost:3000/houses/${_this.$route.params.id}`)
+  	axios.get(`http://35.196.201.48/houses/${_this.$route.params.id}`)
   	.then( function (resp) {
   		_this.name = resp.data.data[0].name
   		_this.description = resp.data.data[0].description
@@ -103,4 +103,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+  .columns{
+    padding: 2em 0;
+  }
 </style>
