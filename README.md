@@ -24,6 +24,7 @@ User who has account can publish advertising for his property/house and guest ca
 1. npm install
 2. npm start
 ```
+[Server API](https://github.com/dhnlr/Online-House-Selling/tree/master/server)
 
 #### Client
 ```
